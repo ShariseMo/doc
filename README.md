@@ -21,7 +21,7 @@ DB::rollback();  // 将回滚对数据库做出的更改，并将数据库连接
 try{
     DB::beginTransation();
     // TODO: 一些业务代码
-    DB::commit();  
+    DB::commit();
 }catch(Exception $e){
     DB::rollback();  // 检测到异常则回滚
 }
@@ -62,102 +62,35 @@ wx.requestPayment({
   - 商户 server 接收支付通知 支付结果通知 API： https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=9_7
   - 商户 server 查询支付结果 查询订单 API： https://pay.weixin.qq.com/wiki/doc/api/wxa/wxa_api.php?chapter=9_2
 
+- 生成随机数算法：微信支付 API 接口协议中包含字段 nonce_str，主要保证签名不可预测。生成随机数算法如下：调用随机数函数生成，将得到的值转换为字符串。
+- 签名算法：签名生成通用步骤：
+  - 设所有发送或者接收到的数据为集合 M，将 M 内非空参数值的参数进行字典排序（按照参数名 ASCII 码从小到大排序），
+  - 使用 URL 键值对的格式拼接成字符串 stringA ： key1=value&key2=value2
+  - 在 stringA 的最后面拼接上 key（商户 API 密钥）得到 stringSignTemp 字符串，并对 stringSignTemp 进行 MD5 运算
+  - 将得到的字符串转为大写 strtoupper($str)，得到 sign 值 signValue
+
 ```
-<?php
-
-namespace App\Libraries;
-
-use App\Models\Consume;
-use EasyWeChat\Factory;
-
-class WxPayLibrary
-{
-    private $config;
-    private $lib;
-
-    public function __construct(Factory $factory)
-    {
-        $this->config = [
-            // 必要配置
-            'app_id' => env('MINA_APP_ID'),
-            'mch_id' => env('WxPAY_MCH_ID'),
-            'key'    => env('WxPAY_KEY'),   // API 密钥
-
-            // 如需使用敏感接口（如退款、发送红包等）需要配置 API 证书路径(登录商户平台下载 API 证书)
-            // 'cert_path' => env('WxPAY_CERT_PATH'), // 注意: 绝对路径！！！！
-            // 'key_path'  => env('WxPAY_KEY_PATH'),  // 注意: 绝对路径！！！！
-
-            'notify_url' => env('WxPay_NOTIFY_URL'),  // 你也可以在下单时单独设置来想覆盖它
-            // 'sandbox'    => true, // 微信支付 沙箱测试环境
-        ];
-
-        $this->lib = $factory::payment($this->config);
-    }
-
-    /**
-     * 打包订单信息
-     * @param $consume
-     * @param $openid
-     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     */
-    public function packOrderInfo($consume, $openid)
-    {
-        $data = [
-            'body'         => $consume->title,
-            'out_trade_no' => $consume->consume_sn,
-            'total_fee'    => bcmul($consume->paid_amount, 100),
-
-            // 'spbill_create_ip' => '127.0.0.1', // 可选，如不传该参数，SDK 将会自动获取相应 IP 地址
-            // 'notify_url'       => env('WxPay_NOTIFY_URL'), // 支付结果通知网址，如果不设置则会使用配置里的默认地址
-
-            'trade_type' => 'JSAPI',
-            'openid'     => $openid,
-        ];
-
-        return $this->lib->order->unify($data);
-    }
-
-    /**
-     * 根据商户订单编号consume_sn查询订单支付状态
-     * @param $consume_sn
-     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     */
-    public function getPaidResultByConsumeSn($consume_sn)
-    {
-        return $this->lib->order->queryByOutTradeNumber($consume_sn);
-    }
-
-    /**
-     * 撤销订单
-     * @param $consume_sn
-     * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
-     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
-     */
-    public function revokeOrder($consume_sn)
-    {
-        return $this->lib->reverse->byOutTradeNumber($consume_sn);
-    }
-
-    /**
-     * 生成数据签名
-     * @param $data
-     * @return string
-     */
-    public function getPaySign($data)
-    {
-        $str = 'appId=' . env('MINA_APP_ID') .
-            '&nonceStr=' . $data['nonceStr'] .
-            '&package=' . $data['package'] .
-            '&signType=MD5&timeStamp=' . $data['timeStamp'] .
-            '&key=' . env('WxPAY_KEY');
-
-        return md5($str);
-    }
-}
+// 传送的参数
+$data = [
+    'appid'  => 'fdshgfhjdsg',
+    'mch_id' => '10258666',
+    'device_info'  => 1000,
+    'body'  => 'test',
+    'nonce_str'  => 'hdfshfDSFDSF'
+];
+$stringA = 'appid=fdshgfhjdsg&body=test&device_info=1000&mch_id=10258666&nonce_str=hdfshfDSFDSF';
+$stringSignTemp = $stringA + '&key=hfdjshfjdshfhj3h4k2h4k32';   // key是商户平台设置的密钥key
+$sign = MD5($stringSignTemp)->toUpperCase();    // MD5签名：8932758923950hsfisfsdfsd
+// 最终得到的要发送的数据
+<xml>
+<appid>fdshgfhjdsg</appid>
+<mch_id>10258666</mch_id>
+<device_info>1000</device_info>
+<body>test</body>
+<nonce_str>hdfshfDSFDSF</nonce_str>
+<sign>$sign</sign>
+</xml>
 ```
-
 
 # KAILAS 会员注册流程
 
