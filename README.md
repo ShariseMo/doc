@@ -164,6 +164,30 @@ function arrayToXml($arr){
 echo arrayToXml($data);
 ```
 
+```
+public function 函数名（）{
+    $access_token = $this->getWxAccessToken();    //若已在构造函数里写了，这里就不用再写了
+
+    $url = "https://api.weixin.qq.com/cgi-bin/。。。。。。。。。。?access_token=".$access_token    //若上一行在构造函数里写了，注意这里就为$this->access_token;
+
+    $array = array(根据JSON或者XML的POST请求数据格式的声明写数据内容);    //注意,里面赋值不用"="，而是用"=>"
+    $postJson = json_encode($array);
+    $res = $this->https_request($url,'post','json',$postJson);
+
+    var_dump($res['一级目录']['二级目录']);    //输出筛选后的结果，若只写$res则为输出全部结果
+}
+
+public function 函数名（）{
+    $access_token = $this->getWxAccessToken();    //若已在构造函数里写了，这里就不用再写了
+
+    $url = "https://api.weixin.qq.com/cgi-bin/。。。。。。。。。。?access_token=".$access_token    //若上一行在构造函数里写了，注意这里就为$this->access_token;
+
+    $res = $this->https_request($url,'get','json','');    //注意最后一个参数为空''
+
+    var_dump($res['一级目录']['二级目录']);    //输出筛选后的结果，若只写$res则为输出全部结果
+}
+```
+
 # KAILAS 会员注册流程
 
 新用户--开通会员卡代码流程 openMemberCard
