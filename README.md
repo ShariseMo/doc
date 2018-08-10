@@ -68,6 +68,7 @@ wx.requestPayment({
   - 使用 URL 键值对的格式拼接成字符串 stringA ： key1=value&key2=value2
   - 在 stringA 的最后面拼接上 key（商户 API 密钥）得到 stringSignTemp 字符串，并对 stringSignTemp 进行 MD5 运算
   - 将得到的字符串转为大写 strtoupper($str)，得到 sign 值 signValue
+- 微信支付接口签名校验工具： https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=20_1
 
 ```
 // 传送的参数
@@ -90,6 +91,77 @@ $sign = MD5($stringSignTemp)->toUpperCase();    // MD5签名：8932758923950hsfi
 <nonce_str>hdfshfDSFDSF</nonce_str>
 <sign>$sign</sign>
 </xml>
+```
+
+- 统一下单：
+  - 商户在小程序中先调用该接口在微信支付服务后台生成预支付交易单，返回正确的 预支付交易（prepay_id）后调起支付
+  - 接口链接： URL 地址：https://api.mch.weixin.qq.com/pay/unifiedorder
+  - ```
+    // 请求参数
+    appid：小程序appid
+    mch_id:商户号
+    //device_info:设备号
+    nonce_str:随机字符串【使用随机数生成算法rand()】,32位以内
+    sign：签名[通过签名算法计算出来的签名值]
+    sign:MD5(签名类型)
+    body:商品描述
+    ```
+
+```
+$data = [
+    'appid'=>'wx1efb4a56d8750db7',
+    'mch_id' => '1339606201',
+//    'key'    => 'aM3AOuim5Ez8EuV2W6ttah1fGt6fgaqI',
+    'nonce_str'=>uniqid(),
+//    'strtype'=>'JSON',
+//    'timestamp'=>time(),
+    'body'=>'test',  // 商品描述
+    'out_trade_no' => date('YmdHis').mt_rand(10000,99999),  // 商户订单号
+    'total_fee' => 880,
+    'spbill_create_ip' => '192.168.16.115',   // 终端ip
+    'notify_url'  => 'https://crm.pinkr.com',
+    'trade_type'  => 'JSAPI',
+    'openid'      => 'oEsjq4qo307uYCayavymBcn3Ve_I'
+];
+//
+//echo '<pre>';
+//var_dump($data);
+//echo '</pre>';
+
+// 数据拼接
+$strA = 'appid=' . $data['appid']
+    . '&body=' . $data['body']
+    .'&mch_id='.$data['mch_id']
+    .'&nonce_str='.$data['nonce_str']
+    .'&'.'notify_url='.$data['notify_url']
+    .'&openid='.$data['openid']
+    . '&out_trade_no=' . $data['out_trade_no']
+    .'&spbill_create_ip='.$data['spbill_create_ip']
+    .'&total_fee='.$data['total_fee']
+    .'&trade_type='.$data['trade_type'];
+
+echo $strA;
+
+//$sign=strtoupper(hash_hmac("sha256",$strA. '&key=aM3AOuim5Ez8EuV2W6ttah1fGt6fgaqI','aM3AOuim5Ez8EuV2W6ttah1fGt6fgaqI')); //注：HMAC-SHA256签名方式
+$sign = strtoupper(md5($strA. '&key=aM3AOuim5Ez8EuV2W6ttah1fGt6fgaqI'));
+
+$data['sign'] = $sign;
+
+//echo json_encode($data, JSON_UNESCAPED_UNICODE);
+echo '</br>';
+
+// 数组转xml
+function arrayToXml($arr){
+    $xml = '&lt'.'xml'.'&gt';
+    foreach ($arr as $key=>$val){
+        $xml=$xml."&lt".$key."&gt".$val."&lt/".$key."&gt";
+    }
+    $xml=$xml.'&lt'.'/xml'.'&gt';
+
+    return $xml;
+}
+
+echo arrayToXml($data);
 ```
 
 # KAILAS 会员注册流程
