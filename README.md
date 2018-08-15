@@ -220,3 +220,23 @@ if ($updateRes['code'] != lang('code_success')) {
 ```
 
 - 会员等级变化日志 member/member_upgrade_log_lib add
+
+'pages/mall/mall-flash/index' => '限时抢购',
+'pages/mall/goods-finish/index' => '提货完成',
+'pages/mall/goods-pay/index' => '支付结果',
+'pages/mall/store-detail/index' => '门店详情',
+'pages/mall/choose-store/index' => '选择门店',
+'pages/mall/determin-order/index' => '确认下单',
+'pages/mall/goods-detail/index' => '商品详情',
+'pages/mall/mall-orders/index' => '商城订单',
+'pages/mall/mall-order-detail/index' => '商城订单详情'
+
+限时抢购："pages/mall/mall-flash/index",
+商城订单："pages/mall/mall-orders/index",
+商城订单详情："pages/mall/mall-order-detail/index",
+商品详情： "pages/mall/goods-detail/index",
+确认下单： "pages/mall/determin-order/index",
+支付结果： "pages/mall/goods-pay/index",
+提货完成： "pages/mall/goods-finish/index",
+选择门店： "pages/mall/choose-store/index",
+门店详情： "pages/mall/store-detail/index",
