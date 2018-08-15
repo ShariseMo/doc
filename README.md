@@ -111,7 +111,7 @@ $sign = MD5($stringSignTemp)->toUpperCase();    // MD5签名：8932758923950hsfi
 $data = [
     'appid'=>'wx1efb4a56d8750db7',
     'mch_id' => '1339606201',
-//    'key'    => 'aM3AOuim5Ez8EuV2W6ttah1fGt6fgaqI',
+//    'key'    => $key,
     'nonce_str'=>uniqid(),
 //    'strtype'=>'JSON',
 //    'timestamp'=>time(),
@@ -123,7 +123,7 @@ $data = [
     'trade_type'  => 'JSAPI',
     'openid'      => 'oEsjq4qo307uYCayavymBcn3Ve_I'
 ];
-//
+
 //echo '<pre>';
 //var_dump($data);
 //echo '</pre>';
@@ -135,20 +135,16 @@ $strA = 'appid=' . $data['appid']
     .'&nonce_str='.$data['nonce_str']
     .'&'.'notify_url='.$data['notify_url']
     .'&openid='.$data['openid']
-    . '&out_trade_no=' . $data['out_trade_no']
+    .'&out_trade_no=' . $data['out_trade_no']
     .'&spbill_create_ip='.$data['spbill_create_ip']
     .'&total_fee='.$data['total_fee']
     .'&trade_type='.$data['trade_type'];
 
-echo $strA;
-
-//$sign=strtoupper(hash_hmac("sha256",$strA. '&key=aM3AOuim5Ez8EuV2W6ttah1fGt6fgaqI','aM3AOuim5Ez8EuV2W6ttah1fGt6fgaqI')); //注：HMAC-SHA256签名方式
-$sign = strtoupper(md5($strA. '&key=aM3AOuim5Ez8EuV2W6ttah1fGt6fgaqI'));
+$sign = strtoupper(md5($strA. '&key='.$key));
 
 $data['sign'] = $sign;
 
 //echo json_encode($data, JSON_UNESCAPED_UNICODE);
-echo '</br>';
 
 // 数组转xml
 function arrayToXml($arr){
@@ -157,14 +153,12 @@ function arrayToXml($arr){
         $xml=$xml."&lt".$key."&gt".$val."&lt/".$key."&gt";
     }
     $xml=$xml.'&lt'.'/xml'.'&gt';
-
     return $xml;
 }
-
-echo arrayToXml($data);
 ```
 
 ```
+// http_request 传输
 public function 函数名（）{
     $access_token = $this->getWxAccessToken();    //若已在构造函数里写了，这里就不用再写了
 
@@ -176,16 +170,22 @@ public function 函数名（）{
 
     var_dump($res['一级目录']['二级目录']);    //输出筛选后的结果，若只写$res则为输出全部结果
 }
+- PHP curl函数：libcurl库允许你与各种服务器使用各种类型的协议进行连接和通讯
+- 目前支持http，https，ftp，gopher，Telnet，dict，file和dap协议。
+- php使用curl函数实现get和post请求的方法
 
-public function 函数名（）{
-    $access_token = $this->getWxAccessToken();    //若已在构造函数里写了，这里就不用再写了
-
-    $url = "https://api.weixin.qq.com/cgi-bin/。。。。。。。。。。?access_token=".$access_token    //若上一行在构造函数里写了，注意这里就为$this->access_token;
-
-    $res = $this->https_request($url,'get','json','');    //注意最后一个参数为空''
-
-    var_dump($res['一级目录']['二级目录']);    //输出筛选后的结果，若只写$res则为输出全部结果
-}
+$url = "https://api.mch.weixin.qq.com/pay/unifiedorder";
+$curl = curl_init();
+curl_setopt($curl, CURLOPT_URL, $url);
+//设置头文件的信息作为数据流输出
+curl_setopt($curl, CURLOPT_HEADER, 1);
+curl_setopt($curl, CURLOPT_HTTPHEADER, Array("Content-Type:text/xml; charset=utf-8"));    // 一定要定义content-type为xml，要不然默认是text/html！
+//设置获取的信息以文件流的形式返回，而不是直接输出。
+curl_setopt($curl, CURLOPT_RETURNTRANSFER,1);
+curl_setopt($curl, CURLOPT_POST, 1);
+curl_setopt($curl, CURLOPT_POSTFIELDS, $xmlData);
+$res = curl_exec($curl);
+curl_close($curl);
 ```
 
 # KAILAS 会员注册流程
@@ -220,23 +220,3 @@ if ($updateRes['code'] != lang('code_success')) {
 ```
 
 - 会员等级变化日志 member/member_upgrade_log_lib add
-
-'pages/mall/mall-flash/index' => '限时抢购',
-'pages/mall/goods-finish/index' => '提货完成',
-'pages/mall/goods-pay/index' => '支付结果',
-'pages/mall/store-detail/index' => '门店详情',
-'pages/mall/choose-store/index' => '选择门店',
-'pages/mall/determin-order/index' => '确认下单',
-'pages/mall/goods-detail/index' => '商品详情',
-'pages/mall/mall-orders/index' => '商城订单',
-'pages/mall/mall-order-detail/index' => '商城订单详情'
-
-限时抢购："pages/mall/mall-flash/index",
-商城订单："pages/mall/mall-orders/index",
-商城订单详情："pages/mall/mall-order-detail/index",
-商品详情： "pages/mall/goods-detail/index",
-确认下单： "pages/mall/determin-order/index",
-支付结果： "pages/mall/goods-pay/index",
-提货完成： "pages/mall/goods-finish/index",
-选择门店： "pages/mall/choose-store/index",
-门店详情： "pages/mall/store-detail/index",
