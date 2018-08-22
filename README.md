@@ -93,19 +93,21 @@ $sign = MD5($stringSignTemp)->toUpperCase();    // MD5签名：8932758923950hsfi
 </xml>
 ```
 
-- 统一下单：
-  - 商户在小程序中先调用该接口在微信支付服务后台生成预支付交易单，返回正确的 预支付交易（prepay_id）后调起支付
-  - 接口链接： URL 地址：https://api.mch.weixin.qq.com/pay/unifiedorder
-  - ```
-    // 请求参数
-    appid：小程序appid
-    mch_id:商户号
-    //device_info:设备号
-    nonce_str:随机字符串【使用随机数生成算法rand()】,32位以内
-    sign：签名[通过签名算法计算出来的签名值]
-    sign:MD5(签名类型)
-    body:商品描述
-    ```
+### 统一下单：
+
+- 商户在小程序中先调用该接口在微信支付服务后台生成预支付交易单，返回正确的 预支付交易（prepay_id）后调起支付
+- 接口链接： URL 地址：https://api.mch.weixin.qq.com/pay/unifiedorder
+
+```
+   // 请求参数
+   appid：小程序appid
+   mch_id:商户号
+   //device_info:设备号
+   nonce_str:随机字符串【使用随机数生成算法rand()】,32位以内
+   sign：签名[通过签名算法计算出来的签名值]
+   sign:MD5(签名类型)
+   body:商品描述
+```
 
 ```
 $data = [
