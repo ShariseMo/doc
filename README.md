@@ -9,7 +9,7 @@
 
 - PDO::beginTransaction();
 
-```
+```php
 DB::beginTransation();  // 启动一个事务
 DB::commit();   // 结束事务并提交
 DB::rollback();  // 将回滚对数据库做出的更改，并将数据库连接返回到自动提交模式
@@ -17,7 +17,7 @@ DB::rollback();  // 将回滚对数据库做出的更改，并将数据库连接
 
 一般会在事务这里加上 try-catch 判断
 
-```
+```php
 try{
     DB::beginTransation();
     // TODO: 一些业务代码
@@ -40,7 +40,7 @@ try{
 
 - 小程序支付：https://developers.weixin.qq.com/miniprogram/dev/api/api-pay.html#wxrequestpaymentobject
 
-```
+```php
 wx.requestPayment({
    'timeStamp': '',     // 【必传】当前的时间
    'nonceStr': '',      // 【必传】随机字符串，长度为32个字符以下
@@ -70,7 +70,7 @@ wx.requestPayment({
   - 将得到的字符串转为大写 strtoupper($str)，得到 sign 值 signValue
 - 微信支付接口签名校验工具： https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=20_1
 
-```
+```php
 // 传送的参数
 $data = [
     'appid'  => 'fdshgfhjdsg',
@@ -98,7 +98,7 @@ $sign = MD5($stringSignTemp)->toUpperCase();    // MD5签名：8932758923950hsfi
 - 商户在小程序中先调用该接口在微信支付服务后台生成预支付交易单，返回正确的 预支付交易（prepay_id）后调起支付
 - 接口链接： URL 地址：https://api.mch.weixin.qq.com/pay/unifiedorder
 
-```
+```php
    // 请求参数
    appid：小程序appid
    mch_id:商户号
@@ -109,7 +109,7 @@ $sign = MD5($stringSignTemp)->toUpperCase();    // MD5签名：8932758923950hsfi
    body:商品描述
 ```
 
-```
+```php
 $data = [
     'appid'=>'wx1efb4a56d8750db7',
     'mch_id' => '1339606201',
@@ -159,7 +159,7 @@ function arrayToXml($arr){
 }
 ```
 
-```
+```php
 // http_request 传输
 public function 函数名（）{
     $access_token = $this->getWxAccessToken();    //若已在构造函数里写了，这里就不用再写了
@@ -202,7 +202,7 @@ curl_close($curl);
 - 信息发送至 ERP utils/log_util erp_info_lib sendNewUserInfoToERP【卡号由 erp 产生过返回】
 - 更新会员卡号 users/user_card_lib updateData
 
-```
+```php
  // 更新会员卡号
 $where = array(
     'user_id' => $user_id
