@@ -22,7 +22,7 @@ try{
     DB::beginTransation();
     // TODO: 一些业务代码
     DB::commit();
-}catch(Exception $e){
+}catch(\Exception $e){
     DB::rollback();  // 检测到异常则回滚
 }
 ```
@@ -199,7 +199,7 @@ curl_close($curl);
 - 验证用户在 ERP 中是否已经存在，如果已存在，则执行绑定老会员操作 checkIsOldUserInERP
 - 获取用户微信信息 wechat/wechat_lib getWeChatByUserId
   users/user_lib updateUserInfo
-- 信息发送至 ERP utils/log_util erp_info_lib sendNewUserInfoToERP
+- 信息发送至 ERP utils/log_util erp_info_lib sendNewUserInfoToERP【卡号由 erp 产生过返回】
 - 更新会员卡号 users/user_card_lib updateData
 
 ```
