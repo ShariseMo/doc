@@ -3,3 +3,5 @@
 - [webpack](/webpack)
 - [tcp-udp](/tcp-udp)
 - [vue](/vue-router)
+
+- [laravel-supervisor](/laravel/supervisor)
