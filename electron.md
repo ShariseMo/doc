@@ -16,7 +16,7 @@
   直接去到网上资源手动下载之后，在环境变量中配置 SASS_BINARY_PATH = 保存的本地路径
   然后执行 npm i -g node-sass 试试安装
 
-- electron 装不上，npm install 报错  
+- electron 装不上，npm install 报错
   electron 打包的时候需要下载一个版本库，速度非常的慢，可以借助淘宝镜像源解决
   ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/ npm install
   ELECTRON_MIRROR=https://npm.taobao.org/mirrors/electron/ npm run build
