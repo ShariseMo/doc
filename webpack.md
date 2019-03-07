@@ -43,10 +43,30 @@ webpack 有灵活的插件和 loader
 
 ## 速度优化策略
 
-- 使用 webpack4
-- 多进程/多实例构建
+- 使用 webpack4：webpack4 相对于 webpack3 性能有比较大的提升
+- 多进程/多实例构建: happyPack
 - 分包
-- 缓存
-- 缩小构建目标
+- 缓存：二次提升构建速度，使用 HardSourceWebpackPlugin 或 cache-loader
+- 缩小构建目标: 尽可能地少构建模块，比如 babal-loader 不解析 node_modules
+  ```
+      module.exports = {
+          rules: {
+              test: /\.js$/,
+              loader: 'happypack/loader',
+              exclude: 'node_modules'
+          }
+      }
+  ```
 
 ## 如何分析页面结构
+
+webpack bundle analyzer
+
+## 构建体积优化
+
+- Scope Hoisting
+  现象： 构建后的代码存在大量重复的闭包代码
+- Tree-shaking
+- 公共资源分离
+- 图片压缩
+- 动态 Polyfill
