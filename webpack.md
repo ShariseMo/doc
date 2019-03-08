@@ -45,17 +45,21 @@ webpack 有灵活的插件和 loader
 
 - 使用 webpack4：webpack4 相对于 webpack3 性能有比较大的提升
 - 多进程/多实例构建: happyPack
+  - 由于运行在 Node.js 上的 webpack 是单线程模型的，所以 webpack 需要处理的事情需要一件一件地做，不能多件事一起做
+  - HappyPack 能让 webpack 同时处理多个任务，把任务分解给多个子进程去并发执行，子进程处理完后再把结果发送给主进程
+  - 由于 JavaScript 是【单线程】模型，要想发挥多核 cpu 的能力，只能通过【多进程】去实现，而无法通过多线程实现
+  - 由于 happyPack 对 file-loader、url-loader 的支持不友好，所以不建议对该 loader 的使用
 - 分包
 - 缓存：二次提升构建速度，使用 HardSourceWebpackPlugin 或 cache-loader
 - 缩小构建目标: 尽可能地少构建模块，比如 babal-loader 不解析 node_modules
   ```
-      module.exports = {
-          rules: {
-              test: /\.js$/,
-              loader: 'happypack/loader',
-              exclude: 'node_modules'
-          }
-      }
+  module.exports = {
+    rules: {
+        test: /\.js$/,
+        loader: 'happypack/loader',
+        exclude: 'node_modules'
+    }
+  }
   ```
 
 ## 如何分析页面结构
