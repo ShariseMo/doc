@@ -7,9 +7,9 @@
 
 四个核心概念
 
-- 入口（entry）
-- 输出（output）
-- loader（style-loader，js-loader。。）
+- 入口（entry）：一个或多个
+- 输出（output）：有且只能一个
+- loader：loader 能够让 webpack 去处理非 js 文件【webpack 自身只理解 js】。loader 可以将所有类型的文件抓换成 webpack 能够处理的有效模块，然后利用 webpack 的打包功能对这些模块进行处理
 - 插件（plugins）
 
 ## 入口（entry）
@@ -25,6 +25,18 @@ module.exports = {
 ## 出口（output）
 
 作用：output 属性告诉 webpack 在哪里输出它所创建的 bundles，以及如何命名这些文件，默认值是'./dist'，基本上，整体应用程序结构，都会被编译到你指定的输出路径的文件夹中。
+
+## 模式（mode）【webpack4 特有】
+
+mode： 'development'/ 'production'
+
+## 执行打包
+
+安装命令： npm install webpack webpack-cli webpack-dev-server
+npm init -y [生成 package.json]
+
+以往的模式： webpack entry.js output.js [webpack 入口文件 出口文件]
+webpack4 ： webpack --config=config/webpack.dev.js [ 使用配置文件中的配置 ]
 
 > webpack 的优势
 
