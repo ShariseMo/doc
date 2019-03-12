@@ -14,17 +14,37 @@ module.exports = {
   mode: 'development',
 
   module: {
-    rules: [{
-      test: /\.css$/,
-      use: [{
+    rules: [
+      // css loader
+      {
+        test: /\.css$/,
+        use: [{
           loader: 'style-loader'
         }, {
           loader: 'css-loader'
-        }
-
-
-      ]
-    }]
+        }]
+      },
+      // img loader
+      {
+        test: /\.(jpg|png|gif|jpeg)$/,
+        use: [{
+          loader: 'file-loader',
+          options: {
+            name: '[name].[ext]'
+          }
+        }]
+      },
+      // html loader
+      {
+        test: /\.html$/,
+        use: [{
+          loader: 'html-loader',
+          options: {
+            name: '[name].html'
+          }
+        }, ]
+      }
+    ]
   },
 
   devServer: {
