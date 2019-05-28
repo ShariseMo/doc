@@ -34,3 +34,15 @@
 
 - package.json
 - build.js
+
+
+## 学习angular[ng-antd + electron]
+
+> ng-antd : https://ng.ant.design/docs/introduce/en
+
+- $ npm install -g @angular/cli   // 全局安装angular
+- $ ng new PROJECT-NAME   // 新建一个angular-antd项目
+- $ cd PROJECT-NAME
+- $ ng add ng-zorro-antd --i18n=en_US
+- $ ng serve --port 0 --open   // 开启项目
+
