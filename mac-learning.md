@@ -8,4 +8,5 @@
 - 显示程序台：捏合拇指与其他三指
 - 显示调度中心： 四指向上
 - 使用moon： ctrl+shift+r
+- mac录屏：cmd+shift+5
 
