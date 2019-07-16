@@ -38,7 +38,7 @@
 
 ## 学习angular[ng-antd + electron]
 
-> ng-antd : https://ng.ant.design/docs/introduce/en
+> ng-antd: https://ng.ant.design/docs/introduce/en
 
 - $ npm install -g @angular/cli   // 全局安装angular
 - $ ng new PROJECT-NAME   // 新建一个angular-antd项目
@@ -46,3 +46,15 @@
 - $ ng add ng-zorro-antd --i18n=en_US
 - $ ng serve --port 0 --open   // 开启项目
 
+## ng-alain
+
+> ng-alain: https://ng-alain.com/
+
+- API相关约定
+  - []  表示属性
+  - ()  表示事件
+  - [()] 表示双向绑定
+  - ng-content 表示组件内容占位符
+  - #tpl  开头表示  <ng-template #tpl>
+
+- 技术栈：本地环境需要安装 node 和 git。技术栈基于 Typescript、Angular、g2、@delon 和 ng-zorro-antd

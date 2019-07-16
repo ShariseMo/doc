@@ -150,7 +150,9 @@
 2019-07-01
 [] 上线：汇萌，凯乐公主
 [] 运营案例，运营计划
-[] 
+
+2019-07-15
+
 
 ## 长期任务
 
@@ -167,6 +169,7 @@
   Windows 系统只能安装 nvm-windows 或者 nvmw
 - 学习使用 mac
 - 学习angular+electron[ng-antd + electron]
+- 学习ng-alian
 
 ## 第三方平台--代小程序实现业务
 
